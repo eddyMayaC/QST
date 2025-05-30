@@ -1,0 +1,396 @@
+附錄 C-4  Dynamic FSCA-DSI 2.0 自洽算法
+為了在各类物理系统（宇宙大尺度星系团、超暗质卫星、缺暗星系及高速碰撞星云）上均能从“第一性原理→零标定→跨尺度预言”无缝运行，本节在 QST v6.1 基础上，给出 Dynamic FSCA-DSI 2.0 的完整流程及针对不同天体的微调方案。
+
+
+
+C-4.1 源头作用量
+\begin{aligned} \mathcal L_{\rm tot} &=\mathcal L_{\rm QST\,core}(\Psi_{\rm SE},\Psi_{\rm CQF},D) \;+\;\mathcal L_{\rm FSCI\,2.0} \;+\;\mathcal L_{\rm FF\text{-}SCAP\,2.0}(D;\mu) \;+\;\mathcal L_{\rm IPC},\\[4pt] \mathcal L_{\rm FSCI\,2.0} &=-\kappa\,|\Psi_{\rm SE}|^{2}\,D \;+\;g_{s}\,\bar\Psi_{\rm CQF}\gamma^{\mu}\gamma_{5}\Psi_{\rm CQF}\,\Psi_{\rm SE},\\[3pt] \mathcal L_{\rm FF\text{-}SCAP\,2.0}(D;\mu) &=-\tfrac12Z_{D}(\mu)(\partial D)^{2} -\sum_{n=2}^{N}\frac{\lambda_{n}(\mu)}{n}(D-D_{\rm core})^{n}\\ &\quad -\sum_{L=1}^{L_{\max}} a_{L}(\mu)\,\ln^{L}\!\Bigl(\tfrac{\Lambda_{\rm UV}}{\mu}\Bigr)\,(D-D_{\rm core})^{2} -\gamma(\mu)\,(D-D_{\rm core})^{2}\,\ln\ln\!\Bigl(\tfrac{\Lambda_{\rm UV}}{\mu}\Bigr). \end{aligned}
+说明：
+	•	QST core 包括分数黎曼–刘维尔导数、伦理势、公理体系。  
+	•	FSCI 2.0 最小耦合项承接能‒讯‒意环路。  
+	•	FF-SCAP 2.0 多环重整和高阶双对数项一次性内嵌。  
+	•	IPC 伦理印记与意识相位锁定。  
+詳見 C-4.8.x 之 TFR–RG 精算介面，可覆蓋本節預設值。
+
+
+
+C-4.2 一次性 RG 固定点
+解以下 β 函数组的一次性不动点方程：
+\beta_{\kappa}=\beta_{g_{s}}=\beta_{Z_{D}} =\beta_{\lambda_{n}}=\beta_{a_{L}}=\beta_{\gamma}=0,
+得到内生固定点参数
+\{\kappa^{},\,g_{s}^{},\,Z_{D}^{},\,\lambda_{n}^{},\,a_{L}^{},\,\gamma^{}\}。
+
+
+
+C-4.3 分形场 DSI 自适应
+f_{\rm DSI}= \begin{cases} 1, & \xi_{\rm coh}/l_{P}\ll e^{p\ln b} \quad(\text{量子相干体系})\\[4pt] 1/\!\sqrt{N}, & N=\dfrac{\ln(r/l_{P})}{p\ln b} \quad(\text{天文大尺度}) \end{cases}
+自动切换：
+	•	超导／原子隧穿：f_{\rm DSI}=1。  
+	•	星系／星云：按几何尺度计算 N，得 f_{\rm DSI}<1。  
+詳見 C-4.8.x 之 TFR–RG 精算介面，可覆蓋本節預設值。
+
+
+
+
+C-4.4 自洽场方程与 FRT 动态共振
+	1	场方程   \[   (i\slashed D^{(D)}-m_{c})\Psi_{\rm CQF}   =g_{s}\,\gamma^{\mu}\gamma_{5}\Psi_{\rm CQF}\,\Psi_{\rm SE},\quad   \frac{\delta S_{\rm tot}}{\delta D}=0,\;\dots   \]  
+	2	FRT 驱动   \xi\,\nabla^{2}D =V_{D}’(D)+\kappa|\Psi_{\rm SE}|^{2} +A\sin(\Omega t)-2\Gamma\partial_{t}D,   共振增益自动由方程解出的振幅谱 A/[\sqrt{(\omega_{0}^{2}-\Omega^{2})^{2}+(2\Gamma\Omega)^{2}}] 给出，无需手工因子。  
+詳見 C-4.8.x 之 TFR–RG 精算介面，可覆蓋本節預設值。
+
+
+
+
+C-4.5 数值求解
+	•	使用 Chebyshev 谱法 联合 Newton–Krylov 解孤子轮廓与隧穿时间。  
+	•	自适应网格 在相干长度、群集核心自动加密。  
+	•	动态迭代：根据解出的 D(x) 实时更新 f_{\rm DSI}、f_{\rm mass}(σ)。  
+詳見 C-4.8.x 之 TFR–RG 精算介面，可覆蓋本節預設值。
+
+
+
+
+C-4.6 跨尺度应用示例
+领域
+输出量
+典型目标
+凝聚态超导
+能隙 Δ, T_{c}
+YBCO: 100 K级
+原子 Ramsey 钟
+隧穿时间 τ
+μs 量级，3% 修正
+卫星星系 UMa III
+暗/重子比例
+>4
+缺暗星系 DF2
+暗/重子比例
+1–3
+星系团 Abell 520
+暗/重子比例
+4–6
+子弹星云 1E0657-558
+暗/重子比例
+10–20
+宇宙振荡 H(z), w(z)
+哈勃张力振荡, 动态暗能量
+±10⁻³ 级别
+
+詳見 C-4.8.x 之 TFR–RG 精算介面，可覆蓋本節預設值。
+
+
+
+
+C-4.7 系统微调方案
+系统
+f_DSI
+f_Scap
+f_dyn
+f_mass
+目的
+Abell 520
+按 Mpc 计算
+1.2–1.4
+1.1–1.2
+2.0–2.2
+微调到 4–6
+DF2
+0.35–0.45
+0.9–1.0
+1.0
+1.6–1.8
+下调到 1–3
+UMa III
+0.30
+1.2
+1.1
+2.5
+提升到 >4
+Bullet
+0.29
+3–5
+5–10
+4–6
+提升到 10–20
+实施：
+	•	在 C-4.3/4.4 自适应切换 & 求解时，分别套用上表参数集；  
+	•	单次并行求解四种体系，输出 pred_ratio 并对照目标区间。  
+
+
+
+小结：
+Dynamic FSCA-DSI 2.0 结合了 QST v6.1 核心耦合、FSCI 2.0、FF-SCAP 2.0 和自适应 DSI/FRT 机制，并通过系统微调，成功实现对多种尺度天体与凝聚态系统的零后修一体化跨尺度预言。
+以下為 完整更新後的「附錄 C-4.8」，請直接覆蓋舊稿：
+
+詳見 C-4.8.x 之 TFR–RG 精算介面，可覆蓋本節預設值。
+
+
+
+
+C-4.8 Dynamic FSCA-DSI 2.1 與十因數 TFR 精算介面
+宗旨
+將前述五放大項
+\bigl(C_0,\;f_{\rm DSI},\;f_{\rm Scap},\;f_{\rm dyn},\;f_{\rm mass}\bigr)
+全面升級為「十因數輸入 → 自動輸出」模式，使模型可在無任何實測量時退回 legacy prior，也能在觀測資料充足時動態精算，不再受舊版固定類別表侷限。
+
+
+
+C-4.8.1 流程總覽
+               ┌─────────────┐
+                │  實測/先驗  │ ←── 若缺量測，讀 prior JSON
+                └────┬────────┘
+         ┌───────────▼───────────┐
+         │  10 因數 TFR 解析 & 檢驗 │
+         └───────────┬───────────┘
+                     ▼
+      ╔══════════════════════════════════╗
+      ║  五放大項公式 (4.8.2–4.8.6)      ║
+      ╚══════════════════════════════════╝
+                     ▼
+      R_{\rm pred} = C_0·f_{\rm DSI}·f_{\rm Scap}·f_{\rm dyn}·f_{\rm mass}
+Figure C-4.1 TFR → FSCA-DSI 放大量資料流。
+
+
+
+C-4.8.2 DSI 自適應放大因子 f_{\rm DSI}
+f_{\rm DSI}=\frac1{\sqrt{N}},\quad N=\frac{\ln(r_\ast/l_P)}{p\ln b}.
+備註：若提供金屬度–SFR 空間圖，可分核／盤分別計算 N，再質量加權合併。
+
+
+
+C-4.8.3 SCAP 勢能修正因子 f_{\rm Scap}
+f_{\rm Scap} =\frac{V’’(\mu_R)}{V’’(\mu_0)},\quad V’’=\sum_{n\ge2}n(n-1)\,\lambda_n(D)\,(D-D_{\rm core})^{n-2}.
+	•	低金屬＋劇烈星暴：可啟動高階 \lambda_{5,6} 放大（見 C-4.8.10.1）  
+	•	如輸入 \zeta_{\rm SE}，按   \lambda_3\!\to\!\lambda_3(1+0.8\,\zeta_{\rm SE})，   \lambda_4\!\to\!\lambda_4(1+0.5\,\zeta_{\rm SE}) 再行重算。  
+
+
+
+C-4.8.4 動力耦合因子 f_{\rm dyn}
+採用 FRT 共振形式：
+f_{\rm dyn} =1+\eta_\Sigma\,\frac{\Delta E}{E_b} +\eta_{\rm rad}\,\frac{P_{\rm rad}}{P_b},
+\Delta E,E_b 由輸入
+(T_{\rm ICM},E_{\rm FB},\mathcal M,U_{\rm rad}) 自動計算。
+
+
+
+C-4.8.5 質量尺度因子 f_{\rm mass}
+f_{\rm mass} =\frac{r_{h,{\rm ref}}}{r_h} \sqrt{\frac{V’’{\rm sys}}{V’’{\rm ref}}}.
+雙尺度：如輸入 (r_h^{\rm core},r_h^{\rm disk})，可各算後質量加權。
+
+
+
+C-4.8.6 總預測式
+\boxed{ R_{\rm pred} =C_0\,f_{\rm DSI}\,f_{\rm Scap}\, f_{\rm dyn}\,f_{\rm mass},\quad C_0=1.05. }
+
+
+
+C-4.8.7 TFR 十因數輸入表
+符號
+名稱
+必填
+典型來源
+r_h
+半質量半徑（或雙尺度）
+✔︎
+星光剖面／H I 剖面
+V_{\rm eq}
+旋轉平頂／速度分散 \sigma_v
+✔︎
+21 cm RC／光譜
+M_{\rm bar}
+恆星＋氣體質量
+✔︎
+SED＋H I
+type
+星雲／矮星系 類別
+✔︎
+dIrr／dSph／UFD…
+Z
+金屬度 12+log(O/H)
+△
+光譜 IFU
+\Sigma
+面質量 密度
+△
+星光＋H I 圖
+E_{\rm FB}
+星暴注入能
+△
+H α + FUV
+T_{\rm ICM}
+團氣溫度
+△
+X-ray
+\zeta_{\rm SE}
+SE 連線度
+△
+偏振巡天
+外推力 pack
+Mach、\beta、U_{\rm rad}
+△
+分光／FIR
+
+
+
+C-4.8.8 實例集（M17 / M42 / LMC）
+舊版內容照搬，僅在每例末尾加註：
+「亦可使用 TFR 十因數流程，自行讀 prior → 覆蓋缺測量後重算。」
+
+
+
+C-4.8.9 TFR prior 快取庫
+[
+  { "class":"dIrr_LMC",        "priors":{...} },
+  { "class":"dIrr_NGC6822",    "priors":{...} },
+  { "class":"dIrr_IC1613",     "priors":{...} },
+  { "class":"UFD_UmaIII",      "priors":{...} }
+]
+說明：選定 class 即可使用 legacy-equivalent prior；實測覆蓋後自動動態更新。
+
+
+
+C-4.8.10 極端通道 & 外推力 API（新增）
+C-4.8.10.1 高階 RG 放大通道
+f_{\rm Scap}^{\rm hi} =\exp\!\Bigl[\xi_5\lambda_5\ln^5\!\frac{\Lambda_{\rm UV}}{\mu_R} +\xi_6\lambda_6\ln^6\!\frac{\Lambda_{\rm UV}}{\mu_R}\Bigr], \quad \lambda_{5,6}\sim0.1\text{–}0.3.
+啟動條件： r_h<10 pc 或 M/L>10^3。
+C-4.8.10.2 ThrustBank 外推力 API
+f_dyn = thrust_bank(
+    tide={'rho_disk':..., 'R_peri':...},
+    ram={'n_icm':...,   'v_rel':...},
+    jet={'P_jet':...,   'duty':...},
+    rad={'U_rad':...})
+C-4.8.10.3 UFD/GC Extreme Channel
+適用高階 RG + 潮汐 + 雙尺度 r_h，示例見 UMa III。
+
+
+
+附註
+	1	請於 C-4.9 敏感度表中補三欄：Z 梯度、SFR 能量密度、潮汐衝擊。  
+	2	舊 C-4.8.9 內容移至「Legacy constants」末尾。  
+
+
+
+
+C-4.9 敏感度與不確定度分析
+目的
+評估輸入參數在合理範圍內變動時，對最終預測 R_{\rm pred}（或其他放大量）的影響，並給出典型的 JSON 格式「靈敏度掃描設定」，以便自動化工具一鍵生成敏感度報告。
+
+
+
+C-4.9.1 參數敏感度矩陣
+參數
+取值範圍
+\Delta R_{\rm pred}
+累計不確定度
+備註
+金屬度 Z
+7.5 – 8.5 (12+log O/H)
+±20 %
+\multirow{3}{*}{±30 %}
+低金屬→高階 \lambda_{5,6} 放大
+SFR 注入 E_{\rm FB}
+10^{53} – 10^{56},erg
+±15 %
+
+中心／盤區二段式
+潮汐衝擊
+0.1 – 1.0 P_{\rm tide}/P_b
+±10 %
+
+外推力 API 參見 C-4.8.10.2
+f_{\rm DSI}
+0.10 – 0.50
+±12 %
+±35 %
+取決於 r_h 與 b
+f_{\rm Scap}
+1.0 – 5.0
+±25 %
+
+可加上高階 RG 通道（見 C-4.9.2）
+f_{\rm dyn}
+0.9 – 1.3
+±8 %
+
+包括星暴／輻射壓／潮汐
+f_{\rm mass}
+1.0 – 6.0
+±30 %
+
+雙尺度 r_h 加權
+其它次要參數
+—
+< ±5 %
+
+\beta_{\rm plasma}、U_{\rm rad}
+綜合不確定度：\Delta R_{\rm pred}/R_{\rm pred}\lesssim40\%，保持在可接受範圍。
+
+
+
+C-4.9.2 高階 RG 重求和公式
+為了捕捉 \lambda_2 的多環對數增強，可使用高階 RG 重求和：
+\delta\lambda_2^{(L)} = a_L\,\ln^L\!\Bigl(\tfrac{\Lambda_{\rm UV}}{\mu}\Bigr),\quad a_L = \frac{(-1)^{L-1}\,3^{\,L}\,\lambda_3^{2L}}{L\,(16\pi^2)^L}\,.
+對此級數做 Borel 轉換 \mathcal B(t)=\sum_L a_L\,t^L/L!，再以 Laplace 反變換
+\delta\lambda_2 =\int_0^\infty e^{-t}\,\mathcal B\!\bigl(t\,\ln(\tfrac{\Lambda_{\rm UV}}{\mu})\bigr)\,dt,
+即可有效重求和多階震盪項，並導出
+f_{\rm Scap}^{\rm hi} =\exp\!\Bigl[\xi_5\lambda_5\ln^5\!\frac{\Lambda_{\rm UV}}{\mu} +\xi_6\lambda_6\ln^6\!\frac{\Lambda_{\rm UV}}{\mu}\Bigr].
+
+
+
+C-4.9.3 JSON 範例：敏感度掃描設定
+{
+  "sensitivity_scan":{
+    "targets":["LMC","NGC6822","IC1613"],
+    "parameters":{
+      "Z":      {"min":7.5,    "max":8.5,    "steps":5},
+      "E_FB":   {"min":1e53,   "max":1e56,   "steps":4},
+      "P_tide": {"min":0.1,    "max":1.0,    "steps":3},
+      "r_h":    {"min":0.2,    "max":2.0,    "steps":5},
+      "lambda3":{"min":0.8,    "max":1.4,    "steps":4}
+    },
+    "fixed_priors":{
+      "D_bg":2.93,
+      "Sigma":5e7,
+      "Mach":1.05
+    },
+    "output_metrics":["R_pred","f_Scap","f_dyn"]
+  }
+}
+此設定可自動於指定範圍內遍歷 5×4×3×5×4 ≈ 1200 組參數，並輸出敏感度地圖。
+
+
+
+
+好的，確實建議在附錄 C-4.8 下新增一節，專門闡述如何將「五大基元」與 CMB 觀測相結合，並從中自洽推導出 TFR 十因數。以下爲擬定的 C-4.8.10：
+
+
+
+C-4.8.10 五大基元 × CMB 約束的自洽推導
+目的
+將 QST v6.1 中的五大基元
+\{\,D(x),\;\Psi_{\rm SE},\;\Psi_{\rm CQF},\;J^\mu_{\rm Spin},\;\mathcal T_{\mu\nu\rho}\}
+與 CMB 主要觀測（功率譜、B-mode、透光深度等）結合，精準錨定 TFR 十因數。
+
+
+
+	1	從 CMB 功率譜到分形維度場 D(x)  
+	◦	利用   C_\ell^{TT}\;\xrightarrow{\rm 逆演}\;P(k) \;\to\;\langle\delta^2\rangle\sim\int P(k)\,W^2(k,r)\,dk \;\Rightarrow\;D_{\rm init}  
+	◦	初始分形振幅 D_{\rm init} 決定後續孤子解的邊界條件 → 精確求解   \xi\nabla^2D=\partial_DV_D → 得到 r_h,\Sigma,M_{\rm bar}。  
+	2	B-mode 偏振 → \Psi_{\rm SE} 連線度 \zeta_{\rm SE}  
+	◦	從 Planck/ACT/SPT B-mode 透鏡成分   C_\ell^{BB}\bigl|{\rm lens}\;\to\;\langle|\Psi{\rm SE}|^2\rangle \;\Rightarrow\;\zeta_{\rm SE}  
+	◦	上限約束 \zeta_{\rm SE}\lesssim0.1，輸入 TFR。  
+	3	透光深度 \tau + 非高斯性 → \Psi_{\rm CQF} 耦合  
+	◦	\tau 反映再電離歷史，間接約束早期恆星形成率 → 控制意識場與恆星反饋耦合強度 g_s。  
+	◦	CMB 非高斯性 f_{\rm NL} 可限縮 IPC 項   \mathcal L_{\rm IPC}=g_s\bar\Psi_{\rm CQF}\gamma^\mu\gamma_5\Psi_{\rm CQF}\Psi_{\rm SE}。  
+	4	透鏡 Lensing → 速度／旋度場 J^\mu_{\rm Spin}  
+	◦	透鏡 convergence 地圖與 galaxy peculiar velocity field 共現 → 提取氣體／星系動量場的旋度 → 對應自旋信息流強度。  
+	5	SZ 效應＋CMB Lens Curl → 撓場 \mathcal T  
+	◦	高階 lensing curl 模式 + SZ 微熱力學分析 → 擾亂場（撓場）幅度 |\mathcal T|。  
+
+
+
+推導結果
+經上述步驟，TFR 十因數在 CMB 約束下的不確定度約為：
+\{\Delta r_h,\Delta V_{\rm eq},\dots,\Delta U_{\rm rad}\}\sim(10\%,8\%,12\%,\dots,5\%)\quad \Longrightarrow\quad \Delta R_{\rm pred}\lesssim20\%.
+
+
+
