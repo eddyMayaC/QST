@@ -1,0 +1,161 @@
+module FSCI_Solver
+#────────────────────────────────────────────────────────────
+#  fsci_solver.jl   (QST v7 • Appendix E-2.8 reference code)
+#  ---------------------------------------------------------
+#  ‣ 計算四個微調因子 {f_DSI,f_Scap,f_dyn,f_mass}
+#  ‣ 回傳 R_pred = C0 · Π_i f_i
+#  ‣ 對接模組：QST_Core, RG_Engine, FRT_Solver
+#  ---------------------------------------------------------
+#  MIT-style License – feel free to adapt in your own QST lab
+#────────────────────────────────────────────────────────────
+
+using LinearAlgebra          # 只用到 sqrt, log 等
+
+# ==== 依賴的本地模組 (路徑見附錄 E-2.8) ====
+import ..QST_Core
+import ..RG_Engine
+import ..FRT_Solver
+
+#-----------------------------------------------------------
+#  1. 型別定義
+#-----------------------------------------------------------
+
+"""
+    SystemParams
+
+輸入參數（對應單一星系團／超導樣品／數值實驗）。
+
+* `R_sys`         – 系統外尺度 (kpc 或 Mpc)
+* `r_h`           – 孤子／核心半徑 (kpc)
+* `sigma`         – 自我相干度 0–1
+* `impact_energy` – 外加能量密度 J·m⁻³ (FRT 驅動)
+* `Omega_drv`     – 外驅頻率 Ω (s⁻¹)
+* `Gamma`         – 阻尼係數 Γ (s⁻¹)
+"""
+struct SystemParams
+    R_sys::Float64
+    r_h::Float64
+    sigma::Float64
+    impact_energy::Float64
+    Omega_drv::Float64
+    Gamma::Float64
+end
+
+"""
+    FSCIResult
+
+輸出：四因子與最終暗/重子比預測。
+"""
+struct FSCIResult
+    f_DSI::Float64
+    f_Scap::Float64
+    f_dyn::Float64
+    f_mass::Float64
+    R_pred::Float64
+end
+
+#-----------------------------------------------------------
+#  2. 常數（可視需要寫入 config）
+#-----------------------------------------------------------
+
+const C0          = 1.05              # 核心常數
+const a6, a7, a8  = 0.091, 0.0, 0.0   # DSI 多項式係數 (示例)
+const Ωref        = 1.0e-15           # 參考外驅頻率
+const Γref        = 1.0e-16           # 參考阻尼
+const r_h_ref     = 50.0              # 參考孤子半徑 (kpc)
+
+#-----------------------------------------------------------
+#  3. 主計算函式
+#-----------------------------------------------------------
+
+"""
+    calc_fsci_factors(p::SystemParams; μ0 = 1e-3) -> FSCIResult
+
+計算 f_DSI, f_Scap, f_dyn, f_mass 以及 R_pred。
+
+* `μ0` – 參考能標 (默認銀河尺度 10⁻³ kpc⁻¹)。
+"""
+function calc_fsci_factors(p::SystemParams; μ0::Float64 = 1.0e-3)
+
+    # --- 3.1  f_DSI  --------------------------------------------------------
+    λ     = p.R_sys / p.r_h
+    lnλ   = log(λ)
+    Apeak = a6 + a7*lnλ + 0.5*a8*lnλ^2        # 可加高階
+    A0    = a6
+    f_DSI = 1 + (Apeak - A0) / A0
+
+    # --- 3.2  f_Scap  -------------------------------------------------------
+    # 二階耦合 RG 固定點 (取 λ₂, λ₃… 由 RG_Engine 提供)
+    λdict = RG_Engine.solve_RGE(p.r_h)        # Dict{Int,Float64}
+    Vpp   = λdict[3] + λdict[4]*p.r_h         # 極簡近似
+    Vpp0  = RG_Engine.solve_RGE(1/μ0)[3]
+    f_Scap = Vpp / Vpp0
+
+    # --- 3.3  f_dyn  --------------------------------------------------------
+    ω0    = FRT_Solver.natural_freq(p.r_h)
+    num   = p.impact_energy
+    den   = (ω0^2 - p.Omega_drv^2)^2 + (2p.Gamma*p.Omega_drv)^2
+    A     = num / sqrt(den)
+
+    den_ref = (ω0^2 - Ωref^2)^2 + (2Γref*Ωref)^2
+    Aref  = num / sqrt(den_ref)
+    f_dyn = A / Aref
+
+    # --- 3.4  f_mass  -------------------------------------------------------
+    f_mass = (r_h_ref / p.r_h) * sqrt(Vpp / Vpp0)
+
+    # --- 3.5  R_pred  -------------------------------------------------------
+    Rpred  = C0 * f_DSI * f_Scap * f_dyn * f_mass
+
+    return FSCIResult(f_DSI, f_Scap, f_dyn, f_mass, Rpred)
+end
+
+#-----------------------------------------------------------
+#  4. CSV 批次函式（可搭配 DataFrames/CSV，但純手寫也可）
+#-----------------------------------------------------------
+"""
+    predict_ratio(csv_in, csv_out)
+
+批次讀入 `csv_in`（需包含欄位：
+`R_sys,r_h,sigma,impact_energy,Omega_drv,Gamma`），
+計算並把 `R_pred` 欄位寫到 `csv_out`。
+"""
+function predict_ratio(csv_in::String, csv_out::String)
+    # 避免外部依賴，使用簡易解析
+    open(csv_in, "r") do fin
+        header = split(chomp(readline(fin)), ',')
+        idx = Dict(sym=>findfirst(==(sym),header) for sym in
+            ["R_sys","r_h","sigma","impact_energy","Omega_drv","Gamma"])
+        results = IOBuffer()
+        println(results, join(header, ','), ",R_pred")   # 新 header
+        for ln in eachline(fin)
+            cols = split(chomp(ln), ',')
+            p = SystemParams(parse(Float64, cols[idx["R_sys"]]),
+                             parse(Float64, cols[idx["r_h"]]),
+                             parse(Float64, cols[idx["sigma"]]),
+                             parse(Float64, cols[idx["impact_energy"]]),
+                             parse(Float64, cols[idx["Omega_drv"]]),
+                             parse(Float64, cols[idx["Gamma"]]))
+            res = calc_fsci_factors(p)
+            println(results, ln, ',', res.R_pred)
+        end
+        write(csv_out, take!(results))
+    end
+    return nothing
+end
+
+#-----------------------------------------------------------
+#  5. 單元測試 (可由 include 運行)
+#-----------------------------------------------------------
+if abspath(PROGRAM_FILE) == @__FILE__
+    using Test
+    @testset "FSCI Solver sanity" begin
+        p_demo = SystemParams(1.0e3, 30.0, 0.9, 1e-10, 1e-15, 1e-16)
+        res    = calc_fsci_factors(p_demo)
+        @test isfinite(res.R_pred)
+        @test res.f_DSI ≈ 1.0 atol=0.3     # 寬鬆範圍
+    end
+    println("basic tests passed ✓")
+end
+
+end # module
